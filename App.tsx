@@ -22,7 +22,6 @@ import React from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
 
 // Import WebRTC polyfills
-import 'react-native-webrtc';
 import JsSipExample from './src/hooks/JsSipExample';
 
 const App = () => {
