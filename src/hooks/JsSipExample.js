@@ -23,6 +23,8 @@ global.RTCSessionDescription =
 global.RTCSessionDescription || RTCSessionDescription;
 global.RTCIceCandidate = global.RTCIceCandidate || RTCIceCandidate;
 
+JsSIP.debug.enable('JsSIP:*');
+
 const JsSipExample = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [status, setStatus] = useState('Initializing...');
