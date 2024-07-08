@@ -63,7 +63,7 @@ const Login: React.FC = () => {
         setValidationErrors({ general: 'Incorrect username or password' });
         return;
       }
-      navigation.navigate('Home');
+      navigation.navigate('Main');
     } catch (err) {
       setError('Login failed. Please try again.');
     }
@@ -94,7 +94,7 @@ const Login: React.FC = () => {
                 onPress={() => setShowPassword(!showPassword)}
                 style={styles.eyeIcon}>
                 <Icon
-                  name={showPassword ? 'eye-slash' : 'eye'}
+                  name={showPassword ? 'eye' : 'eye-slash'}
                   size={20}
                   color="gray"
                 />

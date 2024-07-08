@@ -1,12 +1,27 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {SafeAreaView, StyleSheet, Text} from 'react-native';
+import JsSipExample from '../hooks/JsSipExample';
 
 const Main: React.FC = () => {
   return (
-    <View>
-      <Text>Web Phone</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>React Native JsSIP Example</Text>
+      <JsSipExample />
+    </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+});
 
 export default Main;
