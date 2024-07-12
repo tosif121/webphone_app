@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Alert,
   Platform,
-  AppRegistry,
 } from 'react-native';
 import JsSIP from 'react-native-jssip';
 import {
@@ -20,7 +19,7 @@ import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 
 global.RTCPeerConnection = global.RTCPeerConnection || RTCPeerConnection;
 global.RTCSessionDescription =
-global.RTCSessionDescription || RTCSessionDescription;
+  global.RTCSessionDescription || RTCSessionDescription;
 global.RTCIceCandidate = global.RTCIceCandidate || RTCIceCandidate;
 
 JsSIP.debug.enable('JsSIP:*');
@@ -37,7 +36,6 @@ const JsSipExample = () => {
     checkPermission();
 
     return () => {
-      // Cleanup on component unmount
       if (uaRef.current) {
         uaRef.current.stop();
         uaRef.current = null;
@@ -51,7 +49,6 @@ const JsSipExample = () => {
         Platform.OS === 'ios'
           ? PERMISSIONS.IOS.MICROPHONE
           : PERMISSIONS.ANDROID.RECORD_AUDIO;
-
       const result = await request(permission);
 
       if (result === RESULTS.GRANTED) {
@@ -91,18 +88,15 @@ const JsSipExample = () => {
     }
 
     try {
-      console.log('Requesting user media');
       const stream = await mediaDevices.getUserMedia({
         audio: true,
         video: false,
       });
-      console.log('User media obtained:', stream);
       const options = {
         mediaConstraints: {audio: true, video: false},
         mediaStream: stream,
       };
 
-      console.log('Making call to:', phoneNumber);
       uaRef.current.call(`sip:${phoneNumber}@samwad.iotcom.io:8089`, options);
       setStatus('Calling...');
     } catch (error) {
@@ -128,25 +122,12 @@ const JsSipExample = () => {
       const ua = new JsSIP.UA(configuration);
       uaRef.current = ua;
 
-      ua.on('connected', () => {
-        setStatus('Connected to SIP server');
-        console.log('Connected to SIP server');
-      });
-      ua.on('disconnected', () => {
-        setStatus('Disconnected from SIP server');
-        console.log('Disconnected from SIP server');
-      });
-      ua.on('registered', () => {
-        setStatus('Registered with SIP server');
-        console.log('Registered with SIP server');
-      });
-      ua.on('unregistered', () => {
-        setStatus('Unregistered from SIP server');
-        console.log('Unregistered from SIP server');
-      });
+      ua.on('connected', () => setStatus('Connected to SIP server'));
+      ua.on('disconnected', () => setStatus('Disconnected from SIP server'));
+      ua.on('registered', () => setStatus('Registered with SIP server'));
+      ua.on('unregistered', () => setStatus('Unregistered from SIP server'));
       ua.on('registrationFailed', data => {
         setStatus(`Registration failed: ${data.cause}`);
-        console.error('Registration failed:', data.cause);
         Alert.alert(
           'Registration Failed',
           `Failed to register with the SIP server: ${data.cause}`,
@@ -157,48 +138,15 @@ const JsSipExample = () => {
         const session = data.session;
         sessionRef.current = session;
 
-        session.on('accepted', () => {
-          setStatus('Call in progress');
-          console.log('Call accepted');
-        });
+        session.on('accepted', () => setStatus('Call in progress'));
         session.on('ended', () => {
           setStatus('Call ended');
-          console.log('Call ended');
           sessionRef.current = null;
         });
         session.on('failed', data => {
           setStatus(`Call failed: ${data.cause}`);
-          console.error('Call failed:', data.cause);
           Alert.alert('Call Failed', `The call failed: ${data.cause}`);
           sessionRef.current = null;
-        });
-        session.on('peerconnection', data => {
-          console.log('Peer connection:', data);
-        });
-        session.on('icecandidate', event => {
-          console.log('ICE candidate:', event.candidate);
-        });
-        session.on('sdp', data => {
-          console.log('SDP received:', data.sdp);
-        });
-        session.on('getusermediafailed', data => {
-          console.error('GetUserMedia failed:', data);
-          Alert.alert('GetUserMedia Failed', 'Failed to obtain user media.');
-        });
-        session.on('peerconnection:createofferfailed', error => {
-          console.error('Create offer failed:', error);
-        });
-        session.on('peerconnection:createanswerfailed', error => {
-          console.error('Create answer failed:', error);
-        });
-        session.on('peerconnection:setlocaldescriptionfailed', error => {
-          console.error('Set local description failed:', error);
-        });
-        session.on('peerconnection:setremotedescriptionfailed', error => {
-          console.error('Set remote description failed:', error);
-        });
-        session.on('peerconnection:addicecandidatefailed', error => {
-          console.error('Add ICE candidate failed:', error);
         });
       });
 
